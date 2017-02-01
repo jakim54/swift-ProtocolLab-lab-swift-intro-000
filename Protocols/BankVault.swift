@@ -19,12 +19,19 @@ class BankVault: ProvideAccess {
     }
     
     func allowEntryWithPassword(password: [Int]) -> Bool {
-        if password.count > 10 || password.count < 0 {
+        if password.count > 10 || password.isEmpty {
             return false
         } else {
-            let numOfPw = password.count
-            let isItEven = password.filter { $0 % 2 == 0 }.count
-            return isItEven == numOfPw ? true : false
+            // used force unwrapped optional, but only because it passed isEmpty. Otherwise, IUO!
+            if password.first! % 2 != 0 {
+                return false
+            } else {
+                // use enumerated to ensure that every other number is even from the first. So index 2, 4, 6 should be even numbers. Not the entire thing. I think you can add +1 to filter condition. $0 + 1?
+                let numOfPw = password.count
+                let isItEven = password.filter { $0 % 2 == 0 }.count
+                
+                return isItEven == numOfPw ? true : false
+            }
         }
     }
     
